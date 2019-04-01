@@ -21,25 +21,19 @@ public class Musica {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    
 
     public LocalTime getDuracao() {
         return duracao;
     }
 
-    public void setDuracao(LocalTime duracao) {
-        this.duracao = duracao;
-    }
+
 
     public String getArtista() {
         return artista;
     }
 
-    public void setArtista(String artista) {
-        this.artista = artista;
-    }
+
 
     @Override
     public String toString() {

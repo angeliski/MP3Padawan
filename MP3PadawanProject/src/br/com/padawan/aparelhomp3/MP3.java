@@ -66,7 +66,7 @@ public class MP3 {
 
         System.out.println();
 
-        System.out.println("Voçê que cadastrar uma nova musica?(S/N)");
+        System.out.println("Você que cadastrar uma nova musica?(S/N)");
 
         String resposta = respostaUsuario.next();
 
