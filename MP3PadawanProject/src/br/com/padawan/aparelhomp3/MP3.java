@@ -5,6 +5,7 @@ import br.com.padawan.musicas.Musica;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ public class MP3 {
 
     private Scanner respostaUsuario = new Scanner(System.in);
     private Set<Musica> musicas = new LinkedHashSet<>();
+    Musica musicaFiltrada;
 
    private void exibirMenu(){
 
@@ -35,14 +37,64 @@ public class MP3 {
        if (op == 1){
 
            cadastrarMusica();
+       } else if (op == 2) {
+           buscarMusica(musicas);
+       } else if (op == 3) {
+           excluirMusica();
        }
 
     }
 
+    private void excluirMusica() {
+
+        Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
+
+        if(musicaEncontrada.isPresent()){
+
+            musicas.remove(musicaEncontrada.get());
+        }
+
+        System.out.println("Música excluída com sucesso.");
+        System.out.println(musicas);
+    }
+
+    // fixme
+    private void buscarMusica(Set<Musica> musicas) {
+
+       Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
+
+       if(musicaEncontrada.isPresent()){
+           System.out.println(musicaEncontrada);
+       }else{
+           System.out.println("Música não encontrada, deseja buscar novamente?(S/N)");
+           String buscarNovamente = respostaUsuario.next();
+
+           if(buscarNovamente.equalsIgnoreCase("s")){
+               verificaSeExisteMusica(musicas);
+           }else if(buscarNovamente.equalsIgnoreCase("n")){
+               liga();
+           }else{
+               System.out.println("Opção inválida!");
+               liga();
+           }
+       }
+    }
+
+    private Optional<Musica> verificaSeExisteMusica(Set<Musica> musicas){
+        System.out.println("Digite o nome da música para busca: ");
+        String nomeMusica = respostaUsuario.next();
+
+        System.out.println("Digite o artista da música para busca: ");
+        String nomeArtistaMusica = respostaUsuario.next();
+
+       Optional<Musica> musicaSelecionada = musicas.stream()
+               .filter(musica -> musica.getNome().equals(nomeMusica) && musica.getArtista().equals(nomeArtistaMusica))
+               .findFirst();
+
+       return musicaSelecionada;
+    }
+
     private void cadastrarMusica(){
-
-
-
         System.out.println("Digite o nome da música: ");
         String nomeMusica = respostaUsuario.next();
 
