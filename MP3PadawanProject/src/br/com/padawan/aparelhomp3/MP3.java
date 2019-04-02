@@ -9,7 +9,7 @@ import java.util.*;
 public class MP3 {
 
     private Scanner respostaUsuario = new Scanner(System.in);
-    private Set<Musica> musicas = new LinkedHashSet<>();
+    public Set<Musica> musicas = new LinkedHashSet<>();
     int opcaoEscolhida;
 
     private void exibirMenu() {
@@ -19,7 +19,9 @@ public class MP3 {
         System.out.println("[1] - Cadastrar músicas." +
                 System.lineSeparator() + "[2] - Buscar músicas." +
                 System.lineSeparator() + "[3] - Excluir músicas." +
-                System.lineSeparator() + "Escolha uma opção :");
+                System.lineSeparator() + "[4] - Criar Playlist." +
+                System.lineSeparator() + "Escolha uma opção :" +
+                System.lineSeparator());
 
     }
 
@@ -55,6 +57,8 @@ public class MP3 {
               buscarMusica(musicas);
           } else if (op == 3) {
               excluirMusica();
+          } else if (op == 4) {
+              new Playlist().criarPlaylist();
           } else {
               System.out.println("Opção inválida.");
               liga();
@@ -132,7 +136,7 @@ public class MP3 {
         }
     }
 
-    private Optional<Musica> verificaSeExisteMusica(Set<Musica> musicas) {
+    public Optional<Musica> verificaSeExisteMusica(Set<Musica> musicas) {
         System.out.println("Digite o nome da música: ");
         String nomeMusica = respostaUsuario.next();
 
@@ -144,6 +148,7 @@ public class MP3 {
         Optional<Musica> musicaSelecionada = musicas.stream()
                 .filter(musica -> musica.getNome().equals(nomeMusica) && musica.getArtista().equals(nomeArtistaMusica))
                 .findFirst();
+       
 
         return musicaSelecionada;
     }
