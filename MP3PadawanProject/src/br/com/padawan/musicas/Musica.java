@@ -37,10 +37,10 @@ public class Musica {
 
     @Override
     public String toString() {
-        return "Musica{" +
-                "nome='" + nome + '\'' +
-                ", duracao=" + duracao +
-                ", artista='" + artista + '\'' +
+        return "Musica { " +
+                " nome = '" + nome + '\'' +
+                ", duracao = " + duracao +
+                ", artista = '" + artista + '\'' +
                 '}';
     }
 
