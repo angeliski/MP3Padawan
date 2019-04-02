@@ -10,7 +10,7 @@ public class MP3 {
 
     private Scanner respostaUsuario = new Scanner(System.in);
     private Set<Musica> musicas = new LinkedHashSet<>();
-    int opcaoEscolhida;
+    private int opcaoEscolhida;
 
     private void exibirMenu() {
 
@@ -19,6 +19,7 @@ public class MP3 {
         System.out.println("[1] - Cadastrar músicas." +
                 System.lineSeparator() + "[2] - Buscar músicas." +
                 System.lineSeparator() + "[3] - Excluir músicas." +
+                System.lineSeparator() + "[4] - Biblioteca de músicas" +
                 System.lineSeparator() + "Escolha uma opção :");
 
     }
@@ -55,11 +56,53 @@ public class MP3 {
               buscarMusica(musicas);
           } else if (op == 3) {
               excluirMusica();
+          }else if (op == 4) {
+              abrirBiblioteca();
           } else {
               System.out.println("Opção inválida.");
               liga();
           }
     }
+
+    private void abrirBiblioteca(){
+
+        System.out.println("[1] - Tocar todas as musicas" + System.lineSeparator() +
+                           "[2] - Escolher uma playlist"  + System.lineSeparator() +
+                           "Escolha uma opção: " + System.lineSeparator());
+        int opcaoSelecionada = respostaUsuario.nextInt();
+
+        if (opcaoSelecionada == 1){
+            System.out.println(musicas);
+            configurarListaReprodução();
+        }
+
+    }
+
+
+    private void configurarListaReprodução() {
+
+        System.out.println("Configuração de reprodução:");
+        System.out.println("O padrão é sequencial deseja alterar para aleatório? (S/N)");
+        String alterarAletorio = respostaUsuario.next();
+
+        if(alterarAletorio.equalsIgnoreCase("n")){
+            System.out.println(musicas);
+            tocarListaReproducao(musicas);
+        }else if(alterarAletorio.equalsIgnoreCase("s")){
+            Set<Musica> musicasEmbaralhadas = new HashSet<>();
+            for (Musica musica : musicas) {
+                musicasEmbaralhadas.add(musica);
+            }
+            System.out.println(musicasEmbaralhadas);
+            tocarListaReproducao(musicasEmbaralhadas);
+        }
+
+    }
+
+    public void tocarListaReproducao(Set<Musica> musicas){
+        musicas.forEach(musica -> tocarMusica(musica));
+    }
+
 
     private void cadastrarMusica() {
         System.out.println("Digite o nome da música: ");
@@ -110,7 +153,7 @@ public class MP3 {
             String tocarMusica = respostaUsuario.next();
 
             if (tocarMusica.equalsIgnoreCase("s")) {
-                tocaMusica(musicaEncontrada);
+                tocarMusica(musicaEncontrada);
             } else if (tocarMusica.equalsIgnoreCase("n")) {
                 liga();
             } else {
@@ -148,12 +191,22 @@ public class MP3 {
         return musicaSelecionada;
     }
 
-    private void tocaMusica(Optional<Musica> musicaEncontrada) {
+    private void tocarMusica(Optional<Musica> musicaEncontrada) {
         try {
             System.out.println("Tocando " + musicaEncontrada.get().getNome() + " de " + musicaEncontrada.get().getArtista());
             Thread.sleep(10000);
 
             liga();
+
+        } catch (InterruptedException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    private void tocarMusica(Musica musica) {
+        try {
+            System.out.println("Tocando " + musica.getNome() + " de " + musica.getArtista());
+            Thread.sleep(10000);
 
         } catch (InterruptedException ex) {
             System.out.println(ex);
