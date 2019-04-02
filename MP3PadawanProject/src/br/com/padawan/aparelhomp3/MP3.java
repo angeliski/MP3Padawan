@@ -15,6 +15,7 @@ public class MP3 {
     private int segundosEscolhidos;
     private String nomeMusica;
     private String nomeArtistaMusica;
+    private Playlist playlist = new Playlist();
 
     private void exibirMenu() {
 
@@ -24,6 +25,7 @@ public class MP3 {
                 System.lineSeparator() + "[2] - Buscar músicas." +
                 System.lineSeparator() + "[3] - Excluir músicas." +
                 System.lineSeparator() + "[4] - Biblioteca de músicas" +
+                System.lineSeparator() + "[5] - Cadastrar playlist" +
                 System.lineSeparator() + "Escolha uma opção :");
     }
 
@@ -55,6 +57,9 @@ public class MP3 {
             excluirMusica();
         } else if (op == 4) {
             abrirBiblioteca();
+        } else if (op == 5) {
+            playlist.perguntaNomePlaylist();
+            playlist.mostraMusicasExistentes(musicas);
         } else {
             System.out.println("Opção inválida.");
             liga();
