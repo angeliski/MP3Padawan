@@ -95,11 +95,10 @@ public class MP3 {
 
         if (alterarAletorio.equalsIgnoreCase("n")) {
             System.out.println(musicas);
-           tocarListaReproducao((List<Musica>) musicas);
+            List<Musica> musicasEmLista = new ArrayList<>(musicas);
+           tocarListaReproducao(musicasEmLista);
         }else if(alterarAletorio.equalsIgnoreCase("s")){
-            List<Musica> musicasEmbaralhadas = new ArrayList<Musica>(musicas);
-
-
+            List<Musica> musicasEmbaralhadas = new ArrayList<>(musicas);
             Collections.shuffle(musicasEmbaralhadas);
             System.out.println(musicasEmbaralhadas);
             tocarListaReproducao(musicasEmbaralhadas);
