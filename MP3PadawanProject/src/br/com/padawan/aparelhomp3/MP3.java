@@ -1,7 +1,6 @@
 package br.com.padawan.aparelhomp3;
 
 import br.com.padawan.musicas.Musica;
-import jdk.internal.util.xml.impl.Input;
 
 import java.time.LocalTime;
 import java.util.*;
@@ -15,18 +14,21 @@ public class MP3 {
     private int segundosEscolhidos;
     private String nomeMusica;
     private String nomeArtistaMusica;
-    private Playlist playlist = new Playlist();
 
     private void exibirMenu() {
 
-        System.out.println("Menu: ");
-        System.out.println();
-        System.out.println("[1] - Cadastrar músicas." +
-                System.lineSeparator() + "[2] - Buscar músicas." +
-                System.lineSeparator() + "[3] - Excluir músicas." +
-                System.lineSeparator() + "[4] - Biblioteca de músicas" +
+        System.out.println("MP3 - Menu: ");
+        System.out.println("[1] - Cadastrar música." +
+                System.lineSeparator() + "[2] - Buscar música." +
+                System.lineSeparator() + "[3] - Excluir música." +
+                System.lineSeparator() + "[4] - Biblioteca/PlayList" +
                 System.lineSeparator() + "[5] - Cadastrar playlist" +
-                System.lineSeparator() + "Escolha uma opção :");
+                System.lineSeparator() + "[6] - Desligar o mp3" +
+                System.lineSeparator() + "Escolha uma opção : ");
+    }
+
+    private void desligarMP3(){
+        System.exit(0);
     }
 
     private void pegarOpcaoSelecionada() {
@@ -58,10 +60,30 @@ public class MP3 {
         } else if (op == 4) {
             abrirBiblioteca();
         } else if (op == 5) {
-            playlist.perguntaNomePlaylist();
-            playlist.mostraMusicasExistentes(musicas);
-        } else {
+            criarPlayList();
+        } else if(op == 6){
+            desligarMP3();
+        } else{
             System.out.println("Opção inválida.");
+            liga();
+        }
+    }
+
+    private void criarPlayList(){
+        System.out.println("Digite o nome da Play List : ");
+        String nomePlayList = respostaUsuario.next();
+
+        Playlist novaPlayList = new Playlist(nomePlayList);
+        novaPlayList.mostraMusicasExistentes(musicas);
+
+        Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
+        if (musicaEncontrada.isPresent()) {
+            novaPlayList.addMusica(musicaEncontrada.get());
+            System.out.println("Música Adicionada com sucesso!");
+            System.out.println(novaPlayList);
+            liga();
+        }else{
+            System.out.println("Música não encontrada!");
             liga();
         }
     }
@@ -190,7 +212,7 @@ public class MP3 {
 
             System.out.println();
 
-            System.out.println("Você que cadastrar uma nova musica?(S/N)");
+            System.out.println("Você quer cadastrar uma nova música?(S/N)");
 
             String resposta = respostaUsuario.next();
 
