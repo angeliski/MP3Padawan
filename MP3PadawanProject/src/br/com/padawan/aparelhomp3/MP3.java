@@ -1,6 +1,7 @@
 package br.com.padawan.aparelhomp3;
 
 import br.com.padawan.musicas.Musica;
+import jdk.internal.util.xml.impl.Input;
 
 import java.time.LocalTime;
 import java.util.*;
@@ -64,11 +65,23 @@ public class MP3 {
         System.out.println("[1] - Tocar todas as musicas" + System.lineSeparator() +
                 "[2] - Escolher uma playlist" + System.lineSeparator() +
                 "Escolha uma opção: " + System.lineSeparator());
-        int opcaoSelecionada = respostaUsuario.nextInt();
 
-        if (opcaoSelecionada == 1) {
-            System.out.println(musicas);
-            configurarListaReprodução();
+        try {
+            int opcaoSelecionada = respostaUsuario.nextInt();
+
+            if (opcaoSelecionada == 1) {
+                System.out.println(musicas);
+                configurarListaReprodução();
+            } else {
+                System.out.println("Opção selecionada inválida");
+                abrirBiblioteca();
+            }
+        } catch (InputMismatchException e) {
+            if (!respostaUsuario.hasNextInt()){
+                System.out.println("Opção selecionada inválida");
+                respostaUsuario.next();
+                abrirBiblioteca();
+            }
         }
     }
 
@@ -96,7 +109,7 @@ public class MP3 {
         musicas.forEach(musica -> tocarMusica(musica));
     }
 
-    public void minutosInputadosPeloUsuario() {
+    public void pegaMinutosInputadosPeloUsuario() {
         try {
             System.out.println("Digite os minutos: ");
             minutosEscolhidos = respostaUsuario.nextInt();
@@ -110,7 +123,7 @@ public class MP3 {
         }
     }
 
-    public void segundosInputadosPeloUsuario() {
+    public void pegaSegundosInputadosPeloUsuario() {
         try {
             System.out.println("Digite os segundos: ");
             segundosEscolhidos = respostaUsuario.nextInt();
@@ -144,8 +157,8 @@ public class MP3 {
         System.out.println("Digite a duração da música: ");
         int horaMusica = 0;
 
-        minutosInputadosPeloUsuario();
-        segundosInputadosPeloUsuario();
+        pegaMinutosInputadosPeloUsuario();
+        pegaSegundosInputadosPeloUsuario();
 
         if (segundosEscolhidos >= 0 && segundosEscolhidos <= 59 && minutosEscolhidos >= 0 && minutosEscolhidos <= 59) {
             LocalTime duracao = LocalTime.of(horaMusica, minutosEscolhidos, segundosEscolhidos);
