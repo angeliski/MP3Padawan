@@ -21,7 +21,7 @@ public class Musica {
         return nome;
     }
 
-    
+
 
     public LocalTime getDuracao() {
         return duracao;
