@@ -2,7 +2,6 @@ package br.com.padawan.aparelhomp3;
 
 import br.com.padawan.musicas.Musica;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -11,6 +10,10 @@ public class MP3 {
     private Scanner respostaUsuario = new Scanner(System.in);
     private Set<Musica> musicas = new LinkedHashSet<>();
     private int opcaoEscolhida;
+    private int minutosEscolhidos;
+    private int segundosEscolhidos;
+    private String nomeMusica;
+    private String nomeArtistaMusica;
 
     private void exibirMenu() {
 
@@ -21,12 +24,11 @@ public class MP3 {
                 System.lineSeparator() + "[3] - Excluir músicas." +
                 System.lineSeparator() + "[4] - Biblioteca de músicas" +
                 System.lineSeparator() + "Escolha uma opção :");
-
     }
 
     private void pegarOpcaoSelecionada() {
         try {
-           opcaoEscolhida = respostaUsuario.nextInt();
+            opcaoEscolhida = respostaUsuario.nextInt();
         } catch (InputMismatchException e) {
             if (!respostaUsuario.hasNextInt()) {
                 System.out.println("Por favor, digite apenas os digitos indicados antes das opções.");
@@ -38,44 +40,36 @@ public class MP3 {
     }
 
     public void liga() {
-
-
         exibirMenu();
-
         pegarOpcaoSelecionada();
         verificarOpcao(opcaoEscolhida);
-
     }
 
     private void verificarOpcao(int op) {
-
-          if (op == 1) {
-
-              cadastrarMusica();
-          } else if (op == 2) {
-              buscarMusica(musicas);
-          } else if (op == 3) {
-              excluirMusica();
-          }else if (op == 4) {
-              abrirBiblioteca();
-          } else {
-              System.out.println("Opção inválida.");
-              liga();
-          }
+        if (op == 1) {
+            cadastrarMusica();
+        } else if (op == 2) {
+            buscarMusica(musicas);
+        } else if (op == 3) {
+            excluirMusica();
+        } else if (op == 4) {
+            abrirBiblioteca();
+        } else {
+            System.out.println("Opção inválida.");
+            liga();
+        }
     }
 
-    private void abrirBiblioteca(){
-
+    private void abrirBiblioteca() {
         System.out.println("[1] - Tocar todas as musicas" + System.lineSeparator() +
-                           "[2] - Escolher uma playlist"  + System.lineSeparator() +
-                           "Escolha uma opção: " + System.lineSeparator());
+                "[2] - Escolher uma playlist" + System.lineSeparator() +
+                "Escolha uma opção: " + System.lineSeparator());
         int opcaoSelecionada = respostaUsuario.nextInt();
 
-        if (opcaoSelecionada == 1){
+        if (opcaoSelecionada == 1) {
             System.out.println(musicas);
             configurarListaReprodução();
         }
-
     }
 
 
@@ -85,10 +79,10 @@ public class MP3 {
         System.out.println("O padrão é sequencial deseja alterar para aleatório? (S/N)");
         String alterarAletorio = respostaUsuario.next();
 
-        if(alterarAletorio.equalsIgnoreCase("n")){
+        if (alterarAletorio.equalsIgnoreCase("n")) {
             System.out.println(musicas);
             tocarListaReproducao(musicas);
-        }else if(alterarAletorio.equalsIgnoreCase("s")){
+        } else if (alterarAletorio.equalsIgnoreCase("s")) {
             Set<Musica> musicasEmbaralhadas = new HashSet<>();
             for (Musica musica : musicas) {
                 musicasEmbaralhadas.add(musica);
@@ -96,50 +90,85 @@ public class MP3 {
             System.out.println(musicasEmbaralhadas);
             tocarListaReproducao(musicasEmbaralhadas);
         }
-
     }
 
-    public void tocarListaReproducao(Set<Musica> musicas){
+    public void tocarListaReproducao(Set<Musica> musicas) {
         musicas.forEach(musica -> tocarMusica(musica));
     }
 
+    public void minutosInputadosPeloUsuario() {
+        try {
+            System.out.println("Digite os minutos: ");
+            minutosEscolhidos = respostaUsuario.nextInt();
+        } catch (InputMismatchException ex) {
+            if (!respostaUsuario.hasNextInt()) {
+                System.out.println("O valor digitado é inválido");
+                System.out.println();
+                respostaUsuario.next();
+                cadastrarMusica();
+            }
+        }
+    }
 
-    private void cadastrarMusica() {
+    public void segundosInputadosPeloUsuario() {
+        try {
+            System.out.println("Digite os segundos: ");
+            segundosEscolhidos = respostaUsuario.nextInt();
+        } catch (InputMismatchException ex) {
+            if (!respostaUsuario.hasNextInt()) {
+                System.out.println("O valor digitado é inválido");
+                System.out.println();
+                respostaUsuario.next();
+                cadastrarMusica();
+            }
+        }
+    }
+
+    private void recebeDoUsuarioArtistaEMusica() {
+        System.out.println();
         System.out.println("Digite o nome da música: ");
-        String nomeMusica = respostaUsuario.next();
+        nomeMusica = respostaUsuario.next();
 
         respostaUsuario.nextLine();
 
         System.out.println("Digite o artista da música: ");
-        String nomeArtistaMusica = respostaUsuario.nextLine();
+        nomeArtistaMusica = respostaUsuario.nextLine();
+    }
+
+
+    private void cadastrarMusica() {
+        System.out.println("Cadastro de Músicas");
+
+        recebeDoUsuarioArtistaEMusica();
 
         System.out.println("Digite a duração da música: ");
         int horaMusica = 0;
 
-        System.out.println("Digite os minutos: ");
-        int minutoMusica = respostaUsuario.nextInt();
+        minutosInputadosPeloUsuario();
+        segundosInputadosPeloUsuario();
 
-        System.out.println("Digite os segundos: ");
-        int segundoMusica = respostaUsuario.nextInt();
+        if (segundosEscolhidos >= 0 && segundosEscolhidos <= 59 && minutosEscolhidos >= 0 && minutosEscolhidos <= 59) {
+            LocalTime duracao = LocalTime.of(horaMusica, minutosEscolhidos, segundosEscolhidos);
+            Musica novaMusica = new Musica(nomeMusica, duracao, nomeArtistaMusica);
 
-        LocalTime duracao = LocalTime.of(horaMusica, minutoMusica, segundoMusica);
+            musicas.add(novaMusica);
 
-        Musica novaMusica = new Musica(nomeMusica, duracao, nomeArtistaMusica);
+            System.out.println();
 
-        musicas.add(novaMusica);
+            System.out.println("Você que cadastrar uma nova musica?(S/N)");
 
-        System.out.println();
+            String resposta = respostaUsuario.next();
 
-        System.out.println("Você que cadastrar uma nova musica?(S/N)");
+            if (resposta.equalsIgnoreCase("S")) {
 
-        String resposta = respostaUsuario.next();
+                cadastrarMusica();
 
-        if (resposta.equalsIgnoreCase("S")) {
-
-            cadastrarMusica();
-
+            } else {
+                liga();
+            }
         } else {
-            liga();
+            System.out.println("O formato do valor inserido para minutos/segundos é inválido, por favor siga o padrão (00 ~ 59)");
+            cadastrarMusica();
         }
     }
 
@@ -176,13 +205,7 @@ public class MP3 {
     }
 
     private Optional<Musica> verificaSeExisteMusica(Set<Musica> musicas) {
-        System.out.println("Digite o nome da música: ");
-        String nomeMusica = respostaUsuario.next();
-
-        respostaUsuario.nextLine();
-
-        System.out.println("Digite o artista da música: ");
-        String nomeArtistaMusica = respostaUsuario.nextLine();
+        recebeDoUsuarioArtistaEMusica();
 
         Optional<Musica> musicaSelecionada = musicas.stream()
                 .filter(musica -> musica.getNome().equals(nomeMusica) && musica.getArtista().equals(nomeArtistaMusica))
@@ -197,7 +220,6 @@ public class MP3 {
             Thread.sleep(10000);
 
             liga();
-
         } catch (InterruptedException ex) {
             System.out.println(ex);
         }
