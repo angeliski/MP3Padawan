@@ -2,29 +2,23 @@ package br.com.padawan.aparelhomp3;
 
 import br.com.padawan.musicas.Musica;
 
-import java.util.Optional;
 import java.util.Scanner;
-
+import java.util.Set;
 
 public class Playlist {
+    Musica musica;
+    String nomePlaylist;
+    Scanner respostaDoUsuario = new Scanner(System.in);
 
+    public void perguntaNomePlaylist () {
 
+        System.out.println("Digite o nome da playlist");
+        nomePlaylist = respostaDoUsuario.next();
 
+    }
 
-    public void criarPlaylist(){
-
-
-
-
-//        Optional<Musica> musicaEncontrada = new MP3().verificaSeExisteMusica();
-//
-//
-//        Scanner pegaMusicaParaPlaylist = new Scanner(System.in);
-//        System.out.println("Digite o nome da música que deseja inserir.");
-//        pegaMusicaParaPlaylist.next();
-//
-//        pegaMusicaParaPlaylist.equals(musica.getNome());
-
+    public void mostraMusicasExistentes(Set<Musica> musicas) {
+        musicas.forEach(musica -> System.out.println(musica));
     }
 
 }
