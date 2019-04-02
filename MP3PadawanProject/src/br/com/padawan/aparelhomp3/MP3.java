@@ -72,7 +72,6 @@ public class MP3 {
         int opcaoSelecionada = respostaUsuario.nextInt();
 
         if (opcaoSelecionada == 1){
-            System.out.println(musicas);
             configurarListaReprodução();
         }
 
@@ -80,6 +79,7 @@ public class MP3 {
 
 
     private void configurarListaReprodução() {
+        System.out.println(musicas);
 
         System.out.println("Configuração de reprodução:");
         System.out.println("O padrão é sequencial deseja alterar para aleatório? (S/N)");
@@ -87,19 +87,34 @@ public class MP3 {
 
         if(alterarAletorio.equalsIgnoreCase("n")){
             System.out.println(musicas);
-            tocarListaReproducao(musicas);
+            //tocarListaReproducao(musicas);
         }else if(alterarAletorio.equalsIgnoreCase("s")){
-            Set<Musica> musicasEmbaralhadas = new HashSet<>();
-            for (Musica musica : musicas) {
-                musicasEmbaralhadas.add(musica);
-            }
+            List<Musica> musicasEmbaralhadas = new ArrayList<Musica>(musicas);
+
+
+            Collections.shuffle(musicasEmbaralhadas);
             System.out.println(musicasEmbaralhadas);
             tocarListaReproducao(musicasEmbaralhadas);
         }
+        System.out.println("Deseja reproduzir novamente? (s/n)");
+        String escolhaRepeticao = respostaUsuario.next();
+
+        if (escolhaRepeticao.equalsIgnoreCase("s")){
+            configurarListaReprodução();
+        }
+            else if (escolhaRepeticao.equalsIgnoreCase("n")){
+                liga();
+            }
+        else{
+            System.out.println("Opção inválida");
+            liga();
+        }
+
+
 
     }
 
-    public void tocarListaReproducao(Set<Musica> musicas){
+    public void tocarListaReproducao(List<Musica> musicas){
         musicas.forEach(musica -> tocarMusica(musica));
     }
 
