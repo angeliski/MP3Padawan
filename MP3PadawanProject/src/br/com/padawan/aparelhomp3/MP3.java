@@ -65,8 +65,10 @@ public class MP3 {
         System.out.println("Digite o nome da música: ");
         String nomeMusica = respostaUsuario.next();
 
+        respostaUsuario.nextLine();
+
         System.out.println("Digite o artista da música: ");
-        String nomeArtistaMusica = respostaUsuario.next();
+        String nomeArtistaMusica = respostaUsuario.nextLine();
 
         System.out.println("Digite a duração da música: ");
         int horaMusica = 0;
@@ -103,7 +105,7 @@ public class MP3 {
         Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
 
         if (musicaEncontrada.isPresent()) {
-            System.out.println(musicaEncontrada);
+            System.out.println(musicaEncontrada.get());
             System.out.println("Deseja tocar a música?(S/N)");
             String tocarMusica = respostaUsuario.next();
 
@@ -134,8 +136,10 @@ public class MP3 {
         System.out.println("Digite o nome da música: ");
         String nomeMusica = respostaUsuario.next();
 
+        respostaUsuario.nextLine();
+
         System.out.println("Digite o artista da música: ");
-        String nomeArtistaMusica = respostaUsuario.next();
+        String nomeArtistaMusica = respostaUsuario.nextLine();
 
         Optional<Musica> musicaSelecionada = musicas.stream()
                 .filter(musica -> musica.getNome().equals(nomeMusica) && musica.getArtista().equals(nomeArtistaMusica))
@@ -161,11 +165,13 @@ public class MP3 {
         Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
 
         if (musicaEncontrada.isPresent()) {
-
             musicas.remove(musicaEncontrada.get());
+            System.out.println("Música excluída com sucesso.");
+            System.out.println(musicas);
+            liga();
+        } else {
+            System.out.println("A música que você deseja excluir não existe.");
+            liga();
         }
-
-        System.out.println("Música excluída com sucesso.");
-        System.out.println(musicas);
     }
 }
