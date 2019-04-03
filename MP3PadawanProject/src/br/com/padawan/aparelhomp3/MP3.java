@@ -4,7 +4,6 @@ import br.com.padawan.musicas.Musica;
 
 import java.time.LocalTime;
 import java.util.*;
-import br.com.padawan.exception.OpcaoInvalidaException;
 
 public class MP3 {
 
@@ -58,7 +57,7 @@ public class MP3 {
         if (op == 1) {
             cadastrarMusica();
         } else if (op == 2) {
-            buscarMusica(musicas);
+            buscarMusica();
         } else if (op == 3) {
             excluirMusica();
         } else if (op == 4) {
@@ -82,7 +81,7 @@ public class MP3 {
         Playlist novaPlayList = new Playlist(nomePlayList);
         novaPlayList.mostraMusicasExistentes(musicas);
 
-        Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
+        Optional<Musica> musicaEncontrada = verificaSeExisteMusica();
         if (musicaEncontrada.isPresent()) {
             novaPlayList.addMusica(musicaEncontrada.get());
             System.out.println("Música Adicionada com sucesso!");
@@ -111,7 +110,7 @@ public class MP3 {
     private void adicionaMusicasNaPlaylist(){
         Playlist playlistEscolhida = escolherPlaylist().get();
 
-        Musica musicaSelecionada = verificaSeExisteMusica(musicas).get();
+        Musica musicaSelecionada = verificaSeExisteMusica().get();
 
         playlistEscolhida.addMusica(musicaSelecionada);
         System.out.println("Música Adicionada com sucesso!");
@@ -284,9 +283,9 @@ public class MP3 {
         }
     }
 
-    private void buscarMusica(Set<Musica> musicas) {
+    private void buscarMusica() {
 
-        Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
+        Optional<Musica> musicaEncontrada = verificaSeExisteMusica();
 
         if (musicaEncontrada.isPresent()) {
             System.out.println(musicaEncontrada.get());
@@ -306,7 +305,7 @@ public class MP3 {
             String buscarNovamente = respostaUsuario.next();
 
             if (buscarNovamente.equalsIgnoreCase("s")) {
-                buscarMusica(musicas);
+                buscarMusica();
             } else if (buscarNovamente.equalsIgnoreCase("n")) {
                 liga();
             } else {
@@ -316,11 +315,12 @@ public class MP3 {
         }
     }
 
-    private Optional<Musica> verificaSeExisteMusica(Set<Musica> musicas) {
+    private Optional<Musica> verificaSeExisteMusica() {
         recebeDoUsuarioArtistaEMusica();
 
         Optional<Musica> musicaSelecionada = musicas.stream()
-                .filter(musica -> musica.getNome().equals(nomeMusica) && musica.getArtista().equals(nomeArtistaMusica))
+                .filter(musica -> musica.getNome().equalsIgnoreCase(nomeMusica))
+                .filter(musica -> musica.getArtista().equalsIgnoreCase(nomeArtistaMusica))
                 .findFirst();
 
         return musicaSelecionada;
@@ -349,7 +349,7 @@ public class MP3 {
 
     private void excluirMusica() {
 
-        Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
+        Optional<Musica> musicaEncontrada = verificaSeExisteMusica();
 
         if (musicaEncontrada.isPresent()) {
             musicas.remove(musicaEncontrada.get());
