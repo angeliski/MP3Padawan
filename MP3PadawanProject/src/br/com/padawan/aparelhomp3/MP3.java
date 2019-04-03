@@ -4,6 +4,7 @@ import br.com.padawan.musicas.Musica;
 
 import java.time.LocalTime;
 import java.util.*;
+import br.com.padawan.exception.OpcaoInvalidaException;
 
 public class MP3 {
 
