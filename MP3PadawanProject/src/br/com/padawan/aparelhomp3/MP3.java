@@ -25,7 +25,8 @@ public class MP3 {
                 System.lineSeparator() + "[3] - Excluir música." +
                 System.lineSeparator() + "[4] - Biblioteca/PlayList" +
                 System.lineSeparator() + "[5] - Cadastrar playlist" +
-                System.lineSeparator() + "[6] - Desligar o mp3" +
+                System.lineSeparator() + "[6] - Adicionar Musicas na Playlist" +
+                System.lineSeparator() + "[7] - Desligar o mp3" +
                 System.lineSeparator() + "Escolha uma opção : ");
     }
 
@@ -63,7 +64,9 @@ public class MP3 {
             abrirBiblioteca();
         } else if (op == 5) {
             criarPlayList();
-        } else if(op == 6){
+        } else if (op == 6){
+            adicionaMusicasNaPlaylist();
+        } else if(op == 7){
             desligarMP3();
         } else{
             System.out.println("Opção inválida.");
@@ -91,6 +94,30 @@ public class MP3 {
         }
     }
 
+    private Optional<Playlist> escolherPlaylist() {
+        playlists.forEach(playlist -> System.out.println(playlist));
+
+        recebeDoUsuarioPlayList();
+
+        Optional<Playlist> playlistEscolhida = playlists
+                .stream()
+                .filter(playlist -> playlist.nomePlaylist.equals(nomePlaylistInputado))
+                .findFirst();
+
+        return playlistEscolhida;
+    }
+
+    private void adicionaMusicasNaPlaylist(){
+        Playlist playlistEscolhida = escolherPlaylist().get();
+
+        Musica musicaSelecionada = verificaSeExisteMusica(musicas).get();
+
+        playlistEscolhida.addMusica(musicaSelecionada);
+        System.out.println("Música Adicionada com sucesso!");
+        
+        liga();
+    }
+
     private void abrirBiblioteca() {
         System.out.println("[1] - Tocar todas as musicas" + System.lineSeparator() +
                 "[2] - Escolher uma playlist" + System.lineSeparator() +
@@ -103,7 +130,7 @@ public class MP3 {
             if (opcaoSelecionada == 1) {
                 configurarListaReprodução();
             } else if (opcaoSelecionada == 2) {
-                escolherPlaylist();
+                tocaPlayList();
             } else {
                 System.out.println("Opção selecionada inválida");
                 abrirBiblioteca();
@@ -117,19 +144,13 @@ public class MP3 {
         }
     }
 
-    private void escolherPlaylist () {
-        playlists.forEach(playlist -> System.out.println(playlist));
+    private void tocaPlayList () {
+        Playlist playlistEscolhida = escolherPlaylist().get();
 
-        recebeDoUsuarioPlayList();
+        System.out.println("A playlist escolhida foi: " + playlistEscolhida);
 
-        Optional<Playlist> playlistEscolhida = playlists
-                .stream()
-                .filter(playlist -> playlist.nomePlaylist.equals(nomePlaylistInputado))
-                .findFirst();
-
-        System.out.println("A playlist escolhida foi: " + playlistEscolhida.get());
-
-        tocarListaReproducao(playlistEscolhida.get());
+        tocarListaReproducao(playlistEscolhida);
+        liga();
     }
 
 
