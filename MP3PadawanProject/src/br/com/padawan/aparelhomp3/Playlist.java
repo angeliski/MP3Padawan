@@ -14,10 +14,12 @@ public class Playlist {
 
 
     public Playlist(String nomePlaylist){
+
         this.nomePlaylist = nomePlaylist;
     }
 
     public void mostraMusicasExistentes(Set<Musica> musicas) {
+
         musicas.forEach(musica -> System.out.println(musica));
     }
 
@@ -27,9 +29,7 @@ public class Playlist {
 
     @Override
     public String toString() {
-        return "Playlist " +
-                ", nomePlaylist='" + nomePlaylist + '\'' +
-                "musicasPlayList=" + musicasPlayList +
-                '}';
+        return  "NomePlaylist = '" + nomePlaylist + '\'' +
+                " MusicasPlayList = " + musicasPlayList;
     }
 }
