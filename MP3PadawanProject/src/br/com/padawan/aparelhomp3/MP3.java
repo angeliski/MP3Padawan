@@ -1,5 +1,6 @@
 package br.com.padawan.aparelhomp3;
 
+import br.com.padawan.Menu.Menu;
 import br.com.padawan.musicas.Musica;
 
 import java.time.LocalTime;
@@ -7,6 +8,14 @@ import java.util.*;
 
 public class MP3 {
 
+    Menu menu;
+    public static final int cadastroMusica = 1;
+    public static final int consultaMusica = 2;
+    public static final int excluirMusica = 3;
+    public static final int abrirBibliotecaEPlaylist = 4;
+    public static final int cadastrarPlayList = 5;
+    public static final int adicionarMusicaPlayList = 6;
+    public static final int desligarMP3 = 7;
     private Scanner respostaUsuario = new Scanner(System.in);
     private Set<Musica> musicas = new LinkedHashSet<>();
     private Set<Playlist> playlists = new LinkedHashSet<>();
@@ -17,24 +26,21 @@ public class MP3 {
     private String nomeArtistaMusica;
     private String nomePlaylistInputado;
 
-    private void exibirMenu() {
+    public MP3(Menu menu){
+        this.menu = menu;
+    }
 
-        System.out.println("MP3 - Menu: ");
-        System.out.println("[1] - Cadastrar música." +
-                System.lineSeparator() + "[2] - Buscar música." +
-                System.lineSeparator() + "[3] - Excluir música." +
-                System.lineSeparator() + "[4] - Biblioteca/PlayList" +
-                System.lineSeparator() + "[5] - Cadastrar playlist" +
-                System.lineSeparator() + "[6] - Adicionar Musicas na Playlist" +
-                System.lineSeparator() + "[7] - Desligar o mp3" +
-                System.lineSeparator() + "Escolha uma opção : ");
+    public void exibirMenu(){
+        System.out.println("MP3 - Menu");
+        menu.listaOpcoes.forEach(opcao -> System.out.println(opcao));
+        System.out.println("Escolha uma opção: ");
     }
 
     private void desligarMP3(){
         System.exit(0);
     }
 
-    private void pegarOpcaoSelecionada() {
+    public void pegarOpcaoSelecionada() {
         try {
             opcaoEscolhida = respostaUsuario.nextInt();
         } catch (InputMismatchException e) {
@@ -54,19 +60,25 @@ public class MP3 {
     }
 
     private void verificarOpcao(int op) {
-        if (op == 1) {
+        if (op == cadastroMusica) {
             cadastrarMusica();
+<<<<<<< HEAD
         } else if (op == 2) {
             buscarMusica();
         } else if (op == 3) {
+=======
+        } else if (op == consultaMusica) {
+            buscarMusica(musicas);
+        } else if (op == excluirMusica) {
+>>>>>>> ff13314888bf191192ebbc6b181ee091d2d0b98c
             excluirMusica();
-        } else if (op == 4) {
+        } else if (op == abrirBibliotecaEPlaylist) {
             abrirBiblioteca();
-        } else if (op == 5) {
+        } else if (op == cadastrarPlayList) {
             criarPlayList();
-        } else if (op == 6){
+        } else if (op == adicionarMusicaPlayList){
             adicionaMusicasNaPlaylist();
-        } else if(op == 7){
+        } else if(op == desligarMP3){
             desligarMP3();
         } else{
             System.out.println("Opção inválida.");
