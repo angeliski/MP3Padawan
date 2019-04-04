@@ -129,14 +129,22 @@ public class MP3 {
     }
 
     private void adicionaMusicasNaPlaylist(){
-        Playlist playlistEscolhida = escolherPlaylist().get();
+        try {
+            Playlist playlistEscolhida = escolherPlaylist().get();
 
-        Musica musicaSelecionada = verificaSeExisteMusica().get();
+            Musica musicaSelecionada = verificaSeExisteMusica().get();
 
-        playlistEscolhida.addMusica(musicaSelecionada);
-        System.out.println("Música Adicionada com sucesso!");
-        
-        liga();
+            playlistEscolhida.addMusica(musicaSelecionada);
+            System.out.println("Música Adicionada com sucesso!");
+
+            liga();
+        } catch (NoSuchElementException e) {
+            System.out.println();
+            System.out.println("Não existe uma playlist.");
+            System.out.println("Por favor cadastre uma playlist antes de adicionar musicas.");
+            System.out.println();
+            liga();
+        }
     }
 
     private void abrirBiblioteca() {
