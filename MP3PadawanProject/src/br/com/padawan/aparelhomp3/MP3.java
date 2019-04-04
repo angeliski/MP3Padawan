@@ -62,18 +62,12 @@ public class MP3 {
     private void verificarOpcao(int op) {
         if (op == cadastroMusica) {
             cadastrarMusica();
-<<<<<<< HEAD
-        } else if (op == 2) {
-            buscarMusica();
-        } else if (op == 3) {
-=======
         } else if (op == consultaMusica) {
-            buscarMusica(musicas);
+            buscarMusica();
         } else if (op == excluirMusica) {
->>>>>>> ff13314888bf191192ebbc6b181ee091d2d0b98c
             excluirMusica();
         } else if (op == abrirBibliotecaEPlaylist) {
-            abrirBiblioteca();
+            confereSeExisteMusicaParaAbrirBiblioteca();
         } else if (op == cadastrarPlayList) {
             criarPlayList();
         } else if (op == adicionarMusicaPlayList){
@@ -165,6 +159,18 @@ public class MP3 {
         liga();
     }
 
+    private void confereSeExisteMusicaParaAbrirBiblioteca() {
+        int  verificaSeTemMusica = (int) musicas.stream().count();
+
+      if (verificaSeTemMusica == 0) {
+          System.out.println("Não é possível acessar a biblioteca porque não existe nenhuma música cadastrada. Por favor, selecione outra operação: ");
+          System.out.println();
+          liga();
+      } else {
+          abrirBiblioteca();
+      }
+
+    }
 
     private void configurarListaReprodução() {
         System.out.println(musicas);
@@ -177,11 +183,14 @@ public class MP3 {
             System.out.println(musicas);
             List<Musica> musicasEmLista = new ArrayList<>(musicas);
            tocarListaReproducao(musicasEmLista);
-        }else if(alterarAletorio.equalsIgnoreCase("s")){
+        } else if(alterarAletorio.equalsIgnoreCase("s")){
             List<Musica> musicasEmbaralhadas = new ArrayList<>(musicas);
             Collections.shuffle(musicasEmbaralhadas);
             System.out.println(musicasEmbaralhadas);
             tocarListaReproducao(musicasEmbaralhadas);
+        } else if (!alterarAletorio.equalsIgnoreCase("s") && !alterarAletorio.equalsIgnoreCase("n")){
+            System.out.println("Opção inválida");
+            abrirBiblioteca();
         }
         System.out.println("Deseja reproduzir novamente? (s/n)");
         String escolhaRepeticao = respostaUsuario.next();
