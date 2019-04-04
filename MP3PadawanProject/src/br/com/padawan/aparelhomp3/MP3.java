@@ -25,6 +25,7 @@ public class MP3 {
     private String nomeMusica;
     private String nomeArtistaMusica;
     private String nomePlaylistInputado;
+    private boolean temPlaylistCadastrada = false;
 
     public MP3(Menu menu){
         this.menu = menu;
@@ -98,11 +99,25 @@ public class MP3 {
             System.out.println("Música não encontrada!");
             liga();
         }
+
+        temPlaylistCadastrada = true;
+    }
+
+    public void confereSeExistePlaylistParaTocarPlaylist() {
+        int  verificaSeTemPlaylist = (int) playlists.stream().count();
+
+        if (verificaSeTemPlaylist == 0) {
+            System.out.println("Não é possível tocar uma playlist porque não existe nenhuma playlist cadastrada. Por favor, selecione outra operação: ");
+            System.out.println();
+            liga();
+        } else {
+           tocaPlayList();
+        }
     }
 
     private Optional<Playlist> escolherPlaylist() {
-        playlists.forEach(playlist -> System.out.println(playlist));
 
+        playlists.forEach(playlist -> System.out.println(playlist));
         recebeDoUsuarioPlayList();
 
         Optional<Playlist> playlistEscolhida = playlists
@@ -136,7 +151,7 @@ public class MP3 {
             if (opcaoSelecionada == 1) {
                 configurarListaReprodução();
             } else if (opcaoSelecionada == 2) {
-                tocaPlayList();
+                confereSeExistePlaylistParaTocarPlaylist();
             } else {
                 System.out.println("Opção selecionada inválida");
                 abrirBiblioteca();
@@ -206,8 +221,6 @@ public class MP3 {
             liga();
         }
 
-
-
     }
 
     public void tocarListaReproducao(List<Musica> musicas) {
@@ -264,7 +277,6 @@ public class MP3 {
         System.out.println("Digite o nome da Playlist: ");
         nomePlaylistInputado = respostaUsuario.next();
 
-        respostaUsuario.nextLine();
     }
 
 
