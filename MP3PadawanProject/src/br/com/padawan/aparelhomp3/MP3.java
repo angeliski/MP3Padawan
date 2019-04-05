@@ -1,5 +1,6 @@
 package br.com.padawan.aparelhomp3;
 
+import br.com.padawan.Menu.Menu;
 import br.com.padawan.musicas.Musica;
 
 import java.time.LocalTime;
@@ -7,6 +8,14 @@ import java.util.*;
 
 public class MP3 {
 
+    Menu menu;
+    public static final int cadastroMusica = 1;
+    public static final int consultaMusica = 2;
+    public static final int excluirMusica = 3;
+    public static final int abrirBibliotecaEPlaylist = 4;
+    public static final int cadastrarPlayList = 5;
+    public static final int adicionarMusicaPlayList = 6;
+    public static final int desligarMP3 = 7;
     private Scanner respostaUsuario = new Scanner(System.in);
     private Set<Musica> musicas = new LinkedHashSet<>();
     private Set<Playlist> playlists = new LinkedHashSet<>();
@@ -16,25 +25,23 @@ public class MP3 {
     private String nomeMusica;
     private String nomeArtistaMusica;
     private String nomePlaylistInputado;
+    private boolean temPlaylistCadastrada = false;
 
-    private void exibirMenu() {
+    public MP3(Menu menu){
+        this.menu = menu;
+    }
 
-        System.out.println("MP3 - Menu: ");
-        System.out.println("[1] - Cadastrar música." +
-                System.lineSeparator() + "[2] - Buscar música." +
-                System.lineSeparator() + "[3] - Excluir música." +
-                System.lineSeparator() + "[4] - Biblioteca/PlayList" +
-                System.lineSeparator() + "[5] - Cadastrar playlist" +
-                System.lineSeparator() + "[6] - Adicionar Musicas na Playlist" +
-                System.lineSeparator() + "[7] - Desligar o mp3" +
-                System.lineSeparator() + "Escolha uma opção : ");
+    public void exibirMenu(){
+        System.out.println("MP3 - Menu");
+        menu.listaOpcoes.forEach(opcao -> System.out.println(opcao));
+        System.out.println("Escolha uma opção: ");
     }
 
     private void desligarMP3(){
         System.exit(0);
     }
 
-    private void pegarOpcaoSelecionada() {
+    public void pegarOpcaoSelecionada() {
         try {
             opcaoEscolhida = respostaUsuario.nextInt();
         } catch (InputMismatchException e) {
@@ -54,19 +61,19 @@ public class MP3 {
     }
 
     private void verificarOpcao(int op) {
-        if (op == 1) {
+        if (op == cadastroMusica) {
             cadastrarMusica();
-        } else if (op == 2) {
-            buscarMusica(musicas);
-        } else if (op == 3) {
+        } else if (op == consultaMusica) {
+            buscarMusica();
+        } else if (op == excluirMusica) {
             excluirMusica();
-        } else if (op == 4) {
-            abrirBiblioteca();
-        } else if (op == 5) {
+        } else if (op == abrirBibliotecaEPlaylist) {
+            confereSeExisteMusicaParaAbrirBiblioteca();
+        } else if (op == cadastrarPlayList) {
             criarPlayList();
-        } else if (op == 6){
+        } else if (op == adicionarMusicaPlayList){
             adicionaMusicasNaPlaylist();
-        } else if(op == 7){
+        } else if(op == desligarMP3){
             desligarMP3();
         } else{
             System.out.println("Opção inválida.");
@@ -81,7 +88,7 @@ public class MP3 {
         Playlist novaPlayList = new Playlist(nomePlayList);
         novaPlayList.mostraMusicasExistentes(musicas);
 
-        Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
+        Optional<Musica> musicaEncontrada = verificaSeExisteMusica();
         if (musicaEncontrada.isPresent()) {
             novaPlayList.addMusica(musicaEncontrada.get());
             System.out.println("Música Adicionada com sucesso!");
@@ -92,11 +99,25 @@ public class MP3 {
             System.out.println("Música não encontrada!");
             liga();
         }
+
+        temPlaylistCadastrada = true;
+    }
+
+    public void confereSeExistePlaylistParaTocarPlaylist() {
+        int  verificaSeTemPlaylist = (int) playlists.stream().count();
+
+        if (verificaSeTemPlaylist == 0) {
+            System.out.println("Não é possível tocar uma playlist porque não existe nenhuma playlist cadastrada. Por favor, selecione outra operação: ");
+            System.out.println();
+            liga();
+        } else {
+           tocaPlayList();
+        }
     }
 
     private Optional<Playlist> escolherPlaylist() {
-        playlists.forEach(playlist -> System.out.println(playlist));
 
+        playlists.forEach(playlist -> System.out.println(playlist));
         recebeDoUsuarioPlayList();
 
         Optional<Playlist> playlistEscolhida = playlists
@@ -108,14 +129,22 @@ public class MP3 {
     }
 
     private void adicionaMusicasNaPlaylist(){
-        Playlist playlistEscolhida = escolherPlaylist().get();
+        try {
+            Playlist playlistEscolhida = escolherPlaylist().get();
 
-        Musica musicaSelecionada = verificaSeExisteMusica(musicas).get();
+            Musica musicaSelecionada = verificaSeExisteMusica().get();
 
-        playlistEscolhida.addMusica(musicaSelecionada);
-        System.out.println("Música Adicionada com sucesso!");
-        
-        liga();
+            playlistEscolhida.addMusica(musicaSelecionada);
+            System.out.println("Música Adicionada com sucesso!");
+
+            liga();
+        } catch (NoSuchElementException e) {
+            System.out.println();
+            System.out.println("Não existe uma playlist.");
+            System.out.println("Por favor cadastre uma playlist antes de adicionar musicas.");
+            System.out.println();
+            liga();
+        }
     }
 
     private void abrirBiblioteca() {
@@ -130,7 +159,7 @@ public class MP3 {
             if (opcaoSelecionada == 1) {
                 configurarListaReprodução();
             } else if (opcaoSelecionada == 2) {
-                tocaPlayList();
+                confereSeExistePlaylistParaTocarPlaylist();
             } else {
                 System.out.println("Opção selecionada inválida");
                 abrirBiblioteca();
@@ -153,6 +182,18 @@ public class MP3 {
         liga();
     }
 
+    private void confereSeExisteMusicaParaAbrirBiblioteca() {
+        int  verificaSeTemMusica = (int) musicas.stream().count();
+
+      if (verificaSeTemMusica == 0) {
+          System.out.println("Não é possível acessar a biblioteca porque não existe nenhuma música cadastrada. Por favor, selecione outra operação: ");
+          System.out.println();
+          liga();
+      } else {
+          abrirBiblioteca();
+      }
+
+    }
 
     private void configurarListaReprodução() {
         System.out.println(musicas);
@@ -165,11 +206,14 @@ public class MP3 {
             System.out.println(musicas);
             List<Musica> musicasEmLista = new ArrayList<>(musicas);
            tocarListaReproducao(musicasEmLista);
-        }else if(alterarAletorio.equalsIgnoreCase("s")){
+        } else if(alterarAletorio.equalsIgnoreCase("s")){
             List<Musica> musicasEmbaralhadas = new ArrayList<>(musicas);
             Collections.shuffle(musicasEmbaralhadas);
             System.out.println(musicasEmbaralhadas);
             tocarListaReproducao(musicasEmbaralhadas);
+        } else if (!alterarAletorio.equalsIgnoreCase("s") && !alterarAletorio.equalsIgnoreCase("n")){
+            System.out.println("Opção inválida");
+            abrirBiblioteca();
         }
         System.out.println("Deseja reproduzir novamente? (s/n)");
         String escolhaRepeticao = respostaUsuario.next();
@@ -184,8 +228,6 @@ public class MP3 {
             System.out.println("Opção inválida");
             liga();
         }
-
-
 
     }
 
@@ -243,7 +285,6 @@ public class MP3 {
         System.out.println("Digite o nome da Playlist: ");
         nomePlaylistInputado = respostaUsuario.next();
 
-        respostaUsuario.nextLine();
     }
 
 
@@ -283,9 +324,9 @@ public class MP3 {
         }
     }
 
-    private void buscarMusica(Set<Musica> musicas) {
+    private void buscarMusica() {
 
-        Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
+        Optional<Musica> musicaEncontrada = verificaSeExisteMusica();
 
         if (musicaEncontrada.isPresent()) {
             System.out.println(musicaEncontrada.get());
@@ -305,7 +346,7 @@ public class MP3 {
             String buscarNovamente = respostaUsuario.next();
 
             if (buscarNovamente.equalsIgnoreCase("s")) {
-                buscarMusica(musicas);
+                buscarMusica();
             } else if (buscarNovamente.equalsIgnoreCase("n")) {
                 liga();
             } else {
@@ -315,11 +356,12 @@ public class MP3 {
         }
     }
 
-    private Optional<Musica> verificaSeExisteMusica(Set<Musica> musicas) {
+    private Optional<Musica> verificaSeExisteMusica() {
         recebeDoUsuarioArtistaEMusica();
 
         Optional<Musica> musicaSelecionada = musicas.stream()
-                .filter(musica -> musica.getNome().equals(nomeMusica) && musica.getArtista().equals(nomeArtistaMusica))
+                .filter(musica -> musica.getNome().equalsIgnoreCase(nomeMusica))
+                .filter(musica -> musica.getArtista().equalsIgnoreCase(nomeArtistaMusica))
                 .findFirst();
 
         return musicaSelecionada;
@@ -348,7 +390,7 @@ public class MP3 {
 
     private void excluirMusica() {
 
-        Optional<Musica> musicaEncontrada = verificaSeExisteMusica(musicas);
+        Optional<Musica> musicaEncontrada = verificaSeExisteMusica();
 
         if (musicaEncontrada.isPresent()) {
             musicas.remove(musicaEncontrada.get());
