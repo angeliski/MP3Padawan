@@ -18,12 +18,12 @@ public class Playlist {
         this.nomePlaylist = nomePlaylist;
     }
 
-    public void mostraMusicasExistentes(Set<Musica> musicas) {
+    public void mostrarMusicasExistentes(Set<Musica> musicas) {
 
         musicas.forEach(musica -> System.out.println(musica));
     }
 
-    public void addMusica(Musica musica){
+    public void adicionarMusica(Musica musica){
         musicasPlayList.add(musica);
     }
 
