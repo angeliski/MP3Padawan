@@ -27,6 +27,14 @@ public class Playlist {
         musicasPlayList.add(musica);
     }
 
+    public String getNomePlaylist() {
+        return nomePlaylist;
+    }
+
+    public Set<Musica> getMusicasPlayList() {
+        return musicasPlayList;
+    }
+
     @Override
     public String toString() {
         return  "NomePlaylist = '" + nomePlaylist + '\'' +

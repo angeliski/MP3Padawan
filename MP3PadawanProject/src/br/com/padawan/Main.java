@@ -1,20 +1,20 @@
 package br.com.padawan;
 
 import br.com.padawan.Menu.Menu;
-import br.com.padawan.Menu.Opcao;
+import br.com.padawan.Menu.opcoes.*;
 import br.com.padawan.aparelhomp3.MP3;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Opcao cadastrarMusica = new Opcao(1,"Cadastrar músicas");
-        Opcao consultarMusica = new Opcao(2,"Consultar músicas");
-        Opcao excluirMusica = new Opcao(3,"Excluir músicas");
-        Opcao consultarBibliotecaPlayList = new Opcao(4,"Biblioteca / PlayList");
-        Opcao cadastrarPlayList = new Opcao(5,"Cadastrar PlayList");
-        Opcao adicionarMusicasPlayList = new Opcao(6,"Adicionar Músicas na Playlist");
-        Opcao desligarMp3 = new Opcao(7,"Desligar MP3");
+        Opcao cadastrarMusica = new OpcaoCadastrarMusica();
+        Opcao consultarMusica = new OpcaoConsultarMusica();
+        Opcao excluirMusica = new OpcaoExcluirMusica();
+        Opcao consultarBibliotecaPlayList = new OpcaoBiblioteca();
+        Opcao cadastrarPlayList = new OpcaoCadastrarPlaylist();
+        Opcao adicionarMusicasPlayList = new OpcaoAdicionarMusicaNaPlaylist();
+        Opcao desligarMp3 = new OpcaoDesligar();
 
         Menu menuOpcoesMp3 = new Menu();
         menuOpcoesMp3.adicionarOpcao(cadastrarMusica);
